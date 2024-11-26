@@ -34,6 +34,8 @@ namespace Lab05_LTMCB
             tb_pass.PasswordChar = '*';
 
             lbl_status.Visible = false;
+
+            InitializeContextMenu();
         }
 
         private bool CheckInputAndSend()
@@ -237,6 +239,52 @@ namespace Lab05_LTMCB
             }
 
             return 0;
+        }
+
+        private void InitializeContextMenu()
+        {
+            ContextMenuStrip contextMenu = new ContextMenuStrip();
+            ToolStripMenuItem deleteMenuItem = new ToolStripMenuItem("Xóa");
+            deleteMenuItem.Click += DeleteMenuItem_Click;
+            contextMenu.Items.Add(deleteMenuItem);
+            lv_attachments.ContextMenuStrip = contextMenu;
+        }
+
+        private void DeleteMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lv_attachments.SelectedItems.Count > 0)
+            {
+                // Lưu trữ danh sách các file cần xóa
+                List<string> filesToDelete = new List<string>();
+
+                // Duyệt qua tất cả các item được chọn
+                foreach (ListViewItem selectedItem in lv_attachments.SelectedItems)
+                {
+                    // Lấy đường dẫn file từ TooltipText của item
+                    string filePath = selectedItem.ToolTipText;
+
+                    // Thêm vào danh sách các file cần xóa
+                    filesToDelete.Add(filePath);
+                }
+
+                // Xóa các item khỏi ListView và danh sách đính kèm
+                foreach (string filePath in filesToDelete)
+                {
+                    // Tìm item trong ListView và xóa
+                    ListViewItem itemToRemove = lv_attachments.Items.Cast<ListViewItem>()
+                        .FirstOrDefault(item => item.ToolTipText == filePath);
+
+                    if (itemToRemove != null)
+                    {
+                        lv_attachments.Items.Remove(itemToRemove);
+                    }
+
+                    // Xóa file khỏi danh sách đính kèm
+                    attachedFiles.Remove(filePath);
+
+                    // Không xóa icon từ ImageList, tránh làm mất biểu tượng của các file khác cùng kiểu
+                }
+            }
         }
     }
 }
