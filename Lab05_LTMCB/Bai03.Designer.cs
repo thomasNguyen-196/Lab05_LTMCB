@@ -106,7 +106,7 @@
             // 
             // tb_rcp
             // 
-            this.tb_rcp.Location = new System.Drawing.Point(122, 68);
+            this.tb_rcp.Location = new System.Drawing.Point(122, 71);
             this.tb_rcp.Name = "tb_rcp";
             this.tb_rcp.Size = new System.Drawing.Size(268, 20);
             this.tb_rcp.TabIndex = 6;
