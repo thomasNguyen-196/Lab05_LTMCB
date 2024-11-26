@@ -99,6 +99,7 @@
             // 
             this.tb_from.Location = new System.Drawing.Point(122, 35);
             this.tb_from.Name = "tb_from";
+            this.tb_from.ReadOnly = true;
             this.tb_from.Size = new System.Drawing.Size(268, 20);
             this.tb_from.TabIndex = 5;
             this.tb_from.Text = "thomasspielberg5@gmail.com";
@@ -114,6 +115,7 @@
             // 
             this.tb_pass.Location = new System.Drawing.Point(562, 35);
             this.tb_pass.Name = "tb_pass";
+            this.tb_pass.ReadOnly = true;
             this.tb_pass.Size = new System.Drawing.Size(100, 20);
             this.tb_pass.TabIndex = 7;
             this.tb_pass.Text = "ekhs wtxd lvhk upfo";
