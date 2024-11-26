@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net.Mail;
+using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,13 +29,11 @@ namespace Lab05_LTMCB
             using (var client = new ImapClient())
             {
                 // Kết nối đến server IMAP (ví dụ: Gmail sử dụng imap.gmail.com, cổng 993)
-
                 client.Connect("127.0.0.1", 993, true);
 
-
                 // Đăng nhập với thông tin từ giao diện
-                string email = mail_tb.Text.ToString().Trim();
-                string password = pass_tb.Text.ToString().Trim();
+                string email = tb_mail.Text;
+                string password = tb_pass.Text;
                 client.Authenticate(email, password);
 
                 // Truy cập hộp thư "INBOX"
