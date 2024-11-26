@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Bai03));
             this.lbl_from = new System.Windows.Forms.Label();
             this.lbl_to = new System.Windows.Forms.Label();
             this.lbl_pass = new System.Windows.Forms.Label();
@@ -40,6 +41,8 @@
             this.rtb_body = new System.Windows.Forms.RichTextBox();
             this.bt_send = new System.Windows.Forms.Button();
             this.lbl_status = new System.Windows.Forms.Label();
+            this.ptb_attachments = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.ptb_attachments)).BeginInit();
             this.SuspendLayout();
             // 
             // lbl_from
@@ -152,11 +155,25 @@
             this.lbl_status.TabIndex = 11;
             this.lbl_status.Text = "Đang xử lý yêu cầu của bạn...";
             // 
+            // ptb_attachments
+            // 
+            this.ptb_attachments.ErrorImage = null;
+            this.ptb_attachments.Image = ((System.Drawing.Image)(resources.GetObject("ptb_attachments.Image")));
+            this.ptb_attachments.InitialImage = ((System.Drawing.Image)(resources.GetObject("ptb_attachments.InitialImage")));
+            this.ptb_attachments.Location = new System.Drawing.Point(698, 340);
+            this.ptb_attachments.Name = "ptb_attachments";
+            this.ptb_attachments.Size = new System.Drawing.Size(29, 30);
+            this.ptb_attachments.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ptb_attachments.TabIndex = 12;
+            this.ptb_attachments.TabStop = false;
+            this.ptb_attachments.Click += new System.EventHandler(this.ptb_attachments_Click);
+            // 
             // Bai03
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(758, 535);
+            this.Controls.Add(this.ptb_attachments);
             this.Controls.Add(this.bt_send);
             this.Controls.Add(this.rtb_body);
             this.Controls.Add(this.tb_subject);
@@ -172,6 +189,7 @@
             this.Name = "Bai03";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Bai03_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.ptb_attachments)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -191,6 +209,7 @@
         private System.Windows.Forms.RichTextBox rtb_body;
         private System.Windows.Forms.Button bt_send;
         private System.Windows.Forms.Label lbl_status;
+        private System.Windows.Forms.PictureBox ptb_attachments;
     }
 }
 
