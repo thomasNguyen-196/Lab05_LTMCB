@@ -42,6 +42,8 @@
             this.bt_send = new System.Windows.Forms.Button();
             this.lbl_status = new System.Windows.Forms.Label();
             this.ptb_attachments = new System.Windows.Forms.PictureBox();
+            this.lbl_attachments = new System.Windows.Forms.Label();
+            this.lv_attachments = new System.Windows.Forms.ListView();
             ((System.ComponentModel.ISupportInitialize)(this.ptb_attachments)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,7 +51,7 @@
             // 
             this.lbl_from.AutoSize = true;
             this.lbl_from.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_from.Location = new System.Drawing.Point(79, 35);
+            this.lbl_from.Location = new System.Drawing.Point(112, 35);
             this.lbl_from.Name = "lbl_from";
             this.lbl_from.Size = new System.Drawing.Size(48, 17);
             this.lbl_from.TabIndex = 0;
@@ -59,7 +61,7 @@
             // 
             this.lbl_to.AutoSize = true;
             this.lbl_to.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_to.Location = new System.Drawing.Point(79, 71);
+            this.lbl_to.Location = new System.Drawing.Point(112, 71);
             this.lbl_to.Name = "lbl_to";
             this.lbl_to.Size = new System.Drawing.Size(31, 17);
             this.lbl_to.TabIndex = 1;
@@ -69,7 +71,7 @@
             // 
             this.lbl_pass.AutoSize = true;
             this.lbl_pass.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pass.Location = new System.Drawing.Point(492, 35);
+            this.lbl_pass.Location = new System.Drawing.Point(525, 35);
             this.lbl_pass.Name = "lbl_pass";
             this.lbl_pass.Size = new System.Drawing.Size(74, 17);
             this.lbl_pass.TabIndex = 2;
@@ -97,7 +99,7 @@
             // 
             // tb_from
             // 
-            this.tb_from.Location = new System.Drawing.Point(122, 35);
+            this.tb_from.Location = new System.Drawing.Point(155, 35);
             this.tb_from.Name = "tb_from";
             this.tb_from.ReadOnly = true;
             this.tb_from.Size = new System.Drawing.Size(268, 20);
@@ -106,14 +108,14 @@
             // 
             // tb_rcp
             // 
-            this.tb_rcp.Location = new System.Drawing.Point(122, 71);
+            this.tb_rcp.Location = new System.Drawing.Point(155, 71);
             this.tb_rcp.Name = "tb_rcp";
             this.tb_rcp.Size = new System.Drawing.Size(268, 20);
             this.tb_rcp.TabIndex = 6;
             // 
             // tb_pass
             // 
-            this.tb_pass.Location = new System.Drawing.Point(562, 35);
+            this.tb_pass.Location = new System.Drawing.Point(595, 35);
             this.tb_pass.Name = "tb_pass";
             this.tb_pass.ReadOnly = true;
             this.tb_pass.Size = new System.Drawing.Size(100, 20);
@@ -122,14 +124,14 @@
             // 
             // tb_subject
             // 
-            this.tb_subject.Location = new System.Drawing.Point(82, 110);
+            this.tb_subject.Location = new System.Drawing.Point(115, 110);
             this.tb_subject.Name = "tb_subject";
             this.tb_subject.Size = new System.Drawing.Size(580, 20);
             this.tb_subject.TabIndex = 8;
             // 
             // rtb_body
             // 
-            this.rtb_body.Location = new System.Drawing.Point(82, 142);
+            this.rtb_body.Location = new System.Drawing.Point(115, 142);
             this.rtb_body.Name = "rtb_body";
             this.rtb_body.Size = new System.Drawing.Size(580, 228);
             this.rtb_body.TabIndex = 9;
@@ -139,7 +141,7 @@
             // 
             this.bt_send.BackColor = System.Drawing.SystemColors.ControlLight;
             this.bt_send.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_send.Location = new System.Drawing.Point(263, 405);
+            this.bt_send.Location = new System.Drawing.Point(301, 531);
             this.bt_send.Name = "bt_send";
             this.bt_send.Size = new System.Drawing.Size(221, 98);
             this.bt_send.TabIndex = 10;
@@ -151,7 +153,7 @@
             // 
             this.lbl_status.AutoSize = true;
             this.lbl_status.Font = new System.Drawing.Font("Segoe UI", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_status.Location = new System.Drawing.Point(237, 446);
+            this.lbl_status.Location = new System.Drawing.Point(275, 572);
             this.lbl_status.Name = "lbl_status";
             this.lbl_status.Size = new System.Drawing.Size(268, 25);
             this.lbl_status.TabIndex = 11;
@@ -162,7 +164,7 @@
             this.ptb_attachments.ErrorImage = null;
             this.ptb_attachments.Image = ((System.Drawing.Image)(resources.GetObject("ptb_attachments.Image")));
             this.ptb_attachments.InitialImage = ((System.Drawing.Image)(resources.GetObject("ptb_attachments.InitialImage")));
-            this.ptb_attachments.Location = new System.Drawing.Point(698, 340);
+            this.ptb_attachments.Location = new System.Drawing.Point(721, 483);
             this.ptb_attachments.Name = "ptb_attachments";
             this.ptb_attachments.Size = new System.Drawing.Size(29, 30);
             this.ptb_attachments.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -170,11 +172,32 @@
             this.ptb_attachments.TabStop = false;
             this.ptb_attachments.Click += new System.EventHandler(this.ptb_attachments_Click);
             // 
+            // lbl_attachments
+            // 
+            this.lbl_attachments.AutoSize = true;
+            this.lbl_attachments.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_attachments.Location = new System.Drawing.Point(12, 391);
+            this.lbl_attachments.Name = "lbl_attachments";
+            this.lbl_attachments.Size = new System.Drawing.Size(94, 17);
+            this.lbl_attachments.TabIndex = 13;
+            this.lbl_attachments.Text = "Attachments: ";
+            // 
+            // lv_attachments
+            // 
+            this.lv_attachments.HideSelection = false;
+            this.lv_attachments.Location = new System.Drawing.Point(115, 391);
+            this.lv_attachments.Name = "lv_attachments";
+            this.lv_attachments.Size = new System.Drawing.Size(580, 122);
+            this.lv_attachments.TabIndex = 14;
+            this.lv_attachments.UseCompatibleStateImageBehavior = false;
+            // 
             // Bai03
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(758, 535);
+            this.ClientSize = new System.Drawing.Size(813, 647);
+            this.Controls.Add(this.lv_attachments);
+            this.Controls.Add(this.lbl_attachments);
             this.Controls.Add(this.ptb_attachments);
             this.Controls.Add(this.bt_send);
             this.Controls.Add(this.rtb_body);
@@ -212,6 +235,8 @@
         private System.Windows.Forms.Button bt_send;
         private System.Windows.Forms.Label lbl_status;
         private System.Windows.Forms.PictureBox ptb_attachments;
+        private System.Windows.Forms.Label lbl_attachments;
+        private System.Windows.Forms.ListView lv_attachments;
     }
 }
 

@@ -9,6 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 
 namespace Lab05_LTMCB
@@ -18,6 +19,14 @@ namespace Lab05_LTMCB
         public Bai03()
         {
             InitializeComponent();
+            InitializeListView();
+        }
+
+        private void InitializeListView()
+        {
+            // Cấu hình ListView
+            lv_attachments.View = View.SmallIcon; // Chế độ hiển thị icon nhỏ
+            lv_attachments.SmallImageList = imageList; // Gắn ImageList
         }
 
         private void Bai03_Load(object sender, EventArgs e)
@@ -152,15 +161,26 @@ namespace Lab05_LTMCB
                 openFileDialog.Filter = "All Files|*.*";
                 openFileDialog.Title = "Select files to attach";
                 openFileDialog.Multiselect = true; // Cho phép chọn nhiều file
-
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    attachedFiles.AddRange(openFileDialog.FileNames); // Thêm các file vào danh sách
-                    MessageBox.Show(
-                        $"Các tập tin đính kèm:\n{string.Join("\n", openFileDialog.FileNames)}",
-                        "Tập tin đính kèm",
-                        MessageBoxButtons.OK
-                    );
+                    foreach (string filePath in openFileDialog.FileNames)
+                    {
+                        if (!attachedFiles.Contains(filePath)) // Tránh đính kèm trùng lặp
+                        {
+                            attachedFiles.Add(filePath);
+
+                            // Lấy index icon
+                            int imageIndex = GetImageIndexForFile(filePath);
+
+                            // Thêm vào ListView
+                            lv_attachments.Items.Add(new ListViewItem
+                            {
+                                Text = Path.GetFileName(filePath),
+                                ImageIndex = imageIndex,
+                                ToolTipText = filePath // Hiển thị đường dẫn đầy đủ khi hover
+                            });
+                        }
+                    }
                 }
             }
         }
@@ -174,7 +194,49 @@ namespace Lab05_LTMCB
 
             // Xóa danh sách các file đính kèm
             attachedFiles.Clear();
+            clearAttachments();
         }
 
+        private void clearAttachments()
+        {
+            attachedFiles.Clear();
+            lv_attachments.Items.Clear();
+            extensionImageIndex.Clear();
+            imageList.Images.Clear();
+        }
+
+        private ImageList imageList = new ImageList();
+        private Dictionary<string, int> extensionImageIndex = new Dictionary<string, int>();
+
+        private int GetImageIndexForFile(string filePath)
+        {
+            string extension = Path.GetExtension(filePath).ToLower();
+
+            // Nếu extension đã có trong dictionary thì trả về index đã lưu
+            if (extensionImageIndex.ContainsKey(extension))
+            {
+                return extensionImageIndex[extension];
+            }
+
+            try
+            {
+                // Lấy icon cho loại file
+                Icon icon = Icon.ExtractAssociatedIcon(filePath);
+                if (icon != null)
+                {
+                    imageList.Images.Add(extension, icon);
+                    int index = imageList.Images.Count - 1;
+                    extensionImageIndex[extension] = index;
+                    return index;
+                }
+            }
+            catch
+            {
+                // Nếu không lấy được icon, trả về 0 (icon mặc định)
+                return 0;
+            }
+
+            return 0;
+        }
     }
 }
