@@ -96,6 +96,36 @@
     <Compile Include="Bai03.Designer.cs">
       <DependentUpon>Bai03.cs</DependentUpon>
     </Compile>
+    <Compile Include="Bai04.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bai04.Designer.cs">
+      <DependentUpon>Bai04.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bai04_Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bai04_Login.Designer.cs">
+      <DependentUpon>Bai04_Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bai04_Send_Mail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bai04_Send_Mail.Designer.cs">
+      <DependentUpon>Bai04_Send_Mail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bai04_View_Mail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bai04_View_Mail.Designer.cs">
+      <DependentUpon>Bai04_View_Mail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Navigation_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Navigation_Form.Designer.cs">
+      <DependentUpon>Navigation_Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Bai01.resx">
@@ -106,6 +136,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bai03.resx">
       <DependentUpon>Bai03.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bai04.resx">
+      <DependentUpon>Bai04.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bai04_Login.resx">
+      <DependentUpon>Bai04_Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bai04_Send_Mail.resx">
+      <DependentUpon>Bai04_Send_Mail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bai04_View_Mail.resx">
+      <DependentUpon>Bai04_View_Mail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Navigation_Form.resx">
+      <DependentUpon>Navigation_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

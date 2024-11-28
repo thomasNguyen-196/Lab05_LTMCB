@@ -3,23 +3,28 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-
 
 namespace Lab05_LTMCB
 {
-    public partial class Bai03 : Form
+    public partial class Bai04_Send_Mail : Form
     {
-        public Bai03()
+        private string _username;
+        private string _password;
+
+        public Bai04_Send_Mail(string username, string password)
         {
             InitializeComponent();
             InitializeListView();
+
+            _username = username;
+            _password = password;
         }
 
         private void InitializeListView()
@@ -29,7 +34,7 @@ namespace Lab05_LTMCB
             lv_attachments.SmallImageList = imageList; // Gắn ImageList
         }
 
-        private void Bai03_Load(object sender, EventArgs e)
+        private void Bai04_Send_Mail_Load(object sender, EventArgs e)
         {
             lbl_status.Visible = false;
 
@@ -94,7 +99,7 @@ namespace Lab05_LTMCB
 
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress($"{tb_from.Text}"),
+                    From = new MailAddress($"{_username}"),
                     Subject = tb_subject.Text,
                     Body = rtb_body.Text, // Lấy nội dung từ rtb_body
                     IsBodyHtml = true
@@ -110,7 +115,7 @@ namespace Lab05_LTMCB
                     var smtpServer = new SmtpClient("smtp.gmail.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential($"{tb_from.Text}", $"{tb_pass.Text}"),
+                        Credentials = new NetworkCredential($"{_username}", $"{_password}"),
                         EnableSsl = true
                     };
 
