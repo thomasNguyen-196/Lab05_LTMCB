@@ -44,6 +44,7 @@ namespace Lab05_LTMCB
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Đăng nhập thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        listView1.Clear();
                         return;
                     }
                     // Truy cập hộp thư "INBOX"
