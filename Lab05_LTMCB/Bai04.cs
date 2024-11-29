@@ -17,6 +17,8 @@ namespace Lab05_LTMCB
         private string _username;
         private string _password;
         private SemaphoreSlim _imapSemaphore = new SemaphoreSlim(1, 1); // khai báo semaphore để đồng bộ hóa các tác vụ
+        private CancellationTokenSource _cts = new CancellationTokenSource(); // Biến lưu trữ CancellationTokenSource
+
 
         // Constructor nhận ImapClient, username và password
         public Bai04(ImapClient imapClient, string username, string password)
@@ -30,7 +32,7 @@ namespace Lab05_LTMCB
         private async void Bai04_Load(object sender, EventArgs e)
         {
             // Gọi phương thức LoadEmails mà không cần sử dụng CancellationToken
-            await LoadEmails();
+            await LoadEmails(_cts.Token);
         }
 
         private async void Bai04_FormClosing(object sender, FormClosingEventArgs e)
@@ -69,30 +71,33 @@ namespace Lab05_LTMCB
 
         private async void btn_Refresh_Click(object sender, EventArgs e)
         {
-            lv_mails.Items.Clear(); // Xóa các thư đã tải trong ListView
+            // Hủy bỏ tác vụ đang chạy nếu có
+            if (_cts != null && !_cts.Token.IsCancellationRequested)
+            {
+                _cts.Cancel();
+            }
+
+            // Tạo một CancellationTokenSource mới
+            _cts = new CancellationTokenSource();
 
             try
             {
-                // Đợi đến khi có quyền truy cập
-                await _imapSemaphore.WaitAsync();
-
                 if (_imapClient.IsConnected)
                 {
-                    await LoadEmails(); // Gọi lại phương thức LoadEmails
+                    // Gọi lại phương thức LoadEmails với CancellationToken mà không cần Semaphore trong sự kiện này
+                    await LoadEmails(_cts.Token);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi refresh hộp thư: " + ex.Message);
             }
-            finally
-            {
-                _imapSemaphore.Release(); // Giải phóng quyền truy cập
-            }
         }
 
-        private async Task LoadEmails()
+        private async Task LoadEmails(CancellationToken cancellationToken)
         {
+            lv_mails.Items.Clear(); // Xóa các thư đã tải trong ListView
+
             try
             {
                 await _imapSemaphore.WaitAsync(); // Đảm bảo truy cập an toàn
@@ -104,7 +109,10 @@ namespace Lab05_LTMCB
 
                 for (int i = 0; i < mailCount; i++)
                 {
-                    MimeMessage message = await Task.Run(() => inbox.GetMessage(i));
+                    // Kiểm tra xem có yêu cầu hủy bỏ không
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    MimeMessage message = await Task.Run(() => inbox.GetMessage(i), cancellationToken);
                     ListViewItem mail = new ListViewItem
                     {
                         Tag = message,
@@ -120,13 +128,17 @@ namespace Lab05_LTMCB
                     if (i >= 50) break; // Chỉ tải 50 thư đầu tiên
                 }
             }
+            catch (OperationCanceledException)
+            {
+                MessageBox.Show("Tải thư đã bị hủy.");
+            }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi tải thư: " + ex.Message);
             }
             finally
             {
-                _imapSemaphore.Release(); // Giải phóng quyền truy cập
+                _imapSemaphore.Release(); // Giải phóng quyền truy cập sau khi hoàn thành
             }
         }
 
