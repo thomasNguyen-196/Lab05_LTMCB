@@ -84,7 +84,7 @@ namespace Lab05_LTMCB
             {
                 if (_imapClient.IsConnected)
                 {
-                    // Gọi lại phương thức LoadEmails với CancellationToken mà không cần Semaphore trong sự kiện này
+                    // Gọi lại phương thức LoadEmails với CancellationToken
                     await LoadEmails(_cts.Token);
                 }
             }
@@ -98,6 +98,8 @@ namespace Lab05_LTMCB
         {
             try
             {
+                lv_mails.Items.Clear(); // Xóa các thư đã tải trong ListView
+
                 await _imapSemaphore.WaitAsync(); // Đảm bảo truy cập an toàn
 
                 IMailFolder inbox = _imapClient.Inbox;
