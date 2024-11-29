@@ -64,7 +64,7 @@ namespace Lab05_LTMCB
             // Ẩn Bai04 và mở lại form đăng nhập
             Bai04_Login loginForm = new Bai04_Login();
             loginForm.Show();   // Hiển thị lại form đăng nhập
-            this.Hide();        // Ẩn form Bai04 (form điều hướng)
+            this.Close();        // Đóng form -> gọi sự kiện Form_Closing
         }
 
         private async void btn_Refresh_Click(object sender, EventArgs e)
