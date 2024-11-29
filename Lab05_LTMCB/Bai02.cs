@@ -37,8 +37,15 @@ namespace Lab05_LTMCB
                     // Đăng nhập với thông tin từ giao diện
                     string email = mail_tb.Text.ToString().Trim();
                     string password = pass_tb.Text.ToString().Trim();
-                    client.Authenticate(email, password);
-
+                    try
+                    {
+                        client.Authenticate(email, password);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Đăng nhập thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     // Truy cập hộp thư "INBOX"
                     var inbox = client.Inbox;
                     inbox.Open(FolderAccess.ReadOnly);
