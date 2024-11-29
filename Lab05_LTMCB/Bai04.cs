@@ -5,6 +5,7 @@ using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,6 +16,7 @@ namespace Lab05_LTMCB
         private ImapClient _imapClient;
         private string _username;
         private string _password;
+        private SemaphoreSlim _imapSemaphore = new SemaphoreSlim(1, 1); // khai báo semaphore để đồng bộ hóa các tác vụ
 
         // Constructor nhận ImapClient, username và password
         public Bai04(ImapClient imapClient, string username, string password)
@@ -31,12 +33,30 @@ namespace Lab05_LTMCB
             await LoadEmails();
         }
 
-        private void Bai04_FormClosing(object sender, FormClosingEventArgs e)
+        private async void Bai04_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Khi form đóng, hiển thị lại form đăng nhập
+            try
+            {
+                // Đảm bảo không có tác vụ nào khác đang sử dụng ImapClient
+                await _imapSemaphore.WaitAsync();
+
+                if (_imapClient.IsConnected)
+                {
+                    _imapClient.Disconnect(true); // Đóng kết nối IMAP
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi đóng kết nối: " + ex.Message);
+            }
+            finally
+            {
+                _imapSemaphore.Release(); // Giải phóng quyền truy cập
+            }
+
+            // Hiển thị lại form đăng nhập
             Bai04_Login loginForm = new Bai04_Login();
             loginForm.Show();
-            this.Hide();  // Ẩn Bai04 để không thấy form này khi đóng
         }
 
         private void btn_Logout_Click(object sender, EventArgs e)
@@ -47,47 +67,66 @@ namespace Lab05_LTMCB
             this.Hide();        // Ẩn form Bai04 (form điều hướng)
         }
 
-        private void btn_Refresh_Click(object sender, EventArgs e)
+        private async void btn_Refresh_Click(object sender, EventArgs e)
         {
-            // Xóa các thư đã tải trong ListView
-            lv_mails.Items.Clear();
+            lv_mails.Items.Clear(); // Xóa các thư đã tải trong ListView
 
-            // Gọi lại phương thức LoadEmails mà không cần sử dụng CancellationToken
-            LoadEmails();
+            try
+            {
+                // Đợi đến khi có quyền truy cập
+                await _imapSemaphore.WaitAsync();
+
+                if (_imapClient.IsConnected)
+                {
+                    await LoadEmails(); // Gọi lại phương thức LoadEmails
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi refresh hộp thư: " + ex.Message);
+            }
+            finally
+            {
+                _imapSemaphore.Release(); // Giải phóng quyền truy cập
+            }
         }
 
         private async Task LoadEmails()
         {
             try
             {
+                await _imapSemaphore.WaitAsync(); // Đảm bảo truy cập an toàn
+
                 IMailFolder inbox = _imapClient.Inbox;
-                inbox.Open(FolderAccess.ReadOnly); // Mở hộp thư đến chỉ để đọc
+                inbox.Open(FolderAccess.ReadOnly);
 
-                int mailCount = inbox.Count; // Số lượng thư trong inbox
+                int mailCount = inbox.Count;
 
-                // Duyệt qua tất cả các thư trong inbox nhưng tải từng thư một
                 for (int i = 0; i < mailCount; i++)
                 {
-                    MimeMessage message = await Task.Run(() => inbox.GetMessage(i)); // Tải thư bất đồng bộ
-                    ListViewItem mail = new ListViewItem();
-                    mail.Tag = message; // Lưu trữ message trong Tag để sử dụng sau này
-                    mail.Text = (i + 1).ToString(); // Số thứ tự thư, i + 1 vì index bắt đầu từ 0
-                    mail.SubItems.Add(message.From.ToString()); // Thêm người gửi
-                    mail.SubItems.Add(message.Subject); // Thêm tiêu đề
-                    mail.SubItems.Add(message.Date.ToString()); // Thêm ngày gửi
-                    lv_mails.Items.Add(mail); // Thêm vào ListView
+                    MimeMessage message = await Task.Run(() => inbox.GetMessage(i));
+                    ListViewItem mail = new ListViewItem
+                    {
+                        Tag = message,
+                        Text = (i + 1).ToString()
+                    };
+                    mail.SubItems.Add(message.From.ToString());
+                    mail.SubItems.Add(message.Subject);
+                    mail.SubItems.Add(message.Date.ToString());
+                    lv_mails.Items.Add(mail);
 
-                    // Tạm dừng một chút để không làm giao diện bị đơ
-                    await Task.Delay(100); // Thời gian delay giữa các thư (có thể điều chỉnh)
+                    await Task.Delay(100); // Tránh làm giao diện bị đơ
 
-                    // Nếu số lượng thư quá nhiều, có thể thêm điều kiện để thoát sớm
-                    if (i >= 50) // Ví dụ chỉ tải 50 thư đầu tiên để tránh quá tải
-                        break;
+                    if (i >= 50) break; // Chỉ tải 50 thư đầu tiên
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi tải thư: " + ex.Message);
+            }
+            finally
+            {
+                _imapSemaphore.Release(); // Giải phóng quyền truy cập
             }
         }
 
