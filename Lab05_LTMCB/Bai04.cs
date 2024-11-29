@@ -96,8 +96,6 @@ namespace Lab05_LTMCB
 
         private async Task LoadEmails(CancellationToken cancellationToken)
         {
-            lv_mails.Items.Clear(); // Xóa các thư đã tải trong ListView
-
             try
             {
                 await _imapSemaphore.WaitAsync(); // Đảm bảo truy cập an toàn
@@ -131,6 +129,7 @@ namespace Lab05_LTMCB
             catch (OperationCanceledException)
             {
                 MessageBox.Show("Tải thư đã bị hủy.");
+                lv_mails.Items.Clear(); // Xóa các thư đã tải trong ListView
             }
             catch (Exception ex)
             {
